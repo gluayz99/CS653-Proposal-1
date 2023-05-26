@@ -29,4 +29,5 @@ def add_more_cols(row):
 data = pd.read_parquet("../s3/dam_rid.parquet")
 data.index = data['date']
 data.index = pd.to_datetime(data.index, format='%Y-%m-%d')
+
 print(data)
