@@ -25,5 +25,8 @@ def add_more_cols(row):
     except:
         print(row)
 
-data = pd.read_parquet("s3/ดาวคะนอง_iwis.gzip")
-data.apply(add_more_cols, axis=1)
+
+data = pd.read_parquet("../s3/dam_rid.parquet")
+data.index = data['date']
+data.index = pd.to_datetime(data.index, format='%Y-%m-%d')
+print(data)
