@@ -40,6 +40,6 @@ if __name__ == "__main__":
             print("Unable to get response with Code : %d " % (response.status_code))
 
     df = pd.DataFrame.from_dict(export_dict)
-    df.to_parquet(f's3/dam_rid.gzip', compression='gzip')
-    print(f"SUCCESS !! SAVE dam_rid.gzip file ...\n\n")
+    df.to_parquet(f's3/dam_rid.parquet')
+    print(f"SUCCESS !! SAVE dam_rid.gz file ...\n\n")
 

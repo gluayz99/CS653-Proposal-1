@@ -16,7 +16,26 @@ def check_data(row):
         data = data.fetch()
 
 
+def convert_date(row):
+    row['date'] = datetime.strptime(row.index, '%Y-%m-%d')
+    return row
+
+
 def get_metostat(row):
+    dict_province_name = {
+        'ชัยนาท': 'chainat',
+        'ดาวคะนอง': 'dowkhanong',
+        'นครสวรรค์': 'nakornsawan',
+        'บางไทร': 'bangsi',
+        'ปากเกร็ด': 'pakket',
+        'ป่าโมก': 'pamok',
+        'สมุทรปราการ': 'samutprakarn',
+        'สำแล': 'samray',
+        'สิงห์บุรี': 'singburi',
+        'อยุธยา': 'ayuttaya',
+        'อ่างทอง': 'angthong'
+    }
+
     global data, _start_date, _end_date
     lat, lon, province = row['lat'], row['long'], row['province']
 
@@ -34,15 +53,16 @@ def get_metostat(row):
         stations.apply(check_data, axis=1)
         # Print DataFrame
 
-
     data['province'] = province
+    data['date'] = data.index
     print(province)
     print(data)
-    data.to_parquet(f's3/{province}_metostat.gzip', compression='gzip')
-    print(f"SUCCESS !! SAVE {province}_metostat.gzip file ...\n\n")
+    data.to_parquet(f's3/{dict_province_name[province]}_metostat.parquet')
+    print(f"SUCCESS !! SAVE {dict_province_name[province]}_metostat.parquet file ...\n\n")
 
 
 if __name__ == "__main__":
+
     data, _start_date, _end_date = None, None, None
     with open('data/all_date.txt', encoding='utf-8') as f:
         data = f.read()

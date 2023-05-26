@@ -96,6 +96,21 @@ def get_date(row):
 
 
 if __name__ == "__main__":
+
+    dict_province_name = {
+        'ชัยนาท': 'chainat',
+        'ดาวคะนอง': 'dowkhanong',
+        'นครสวรรค์': 'nakornsawan',
+        'บางไทร': 'bangsi',
+        'ปากเกร็ด': 'pakket',
+        'ป่าโมก': 'pamok',
+        'สมุทรปราการ': 'samutprakarn',
+        'สำแล': 'samray',
+        'สิงห์บุรี': 'singburi',
+        'อยุธยา': 'ayuttaya',
+        'อ่างทอง': 'angthong'
+    }
+
     directory = 'data'
     total_rows = 0
     total_files = 0
@@ -133,14 +148,15 @@ if __name__ == "__main__":
             merge_df['province'] = province
 
             merge_df = merge_df.apply(add_more_cols, axis=1)
-
+            merge_df = merge_df[merge_df['WQI'] >= 0.0]
+            merge_df = merge_df[merge_df['WQI'] <= 100.0]
             print(merge_df)
             print(merge_df.groupby(merge_df.date.dt.year)['pH'].sum())
 
             # with pd.option_context('display.max_rows', None, 'display.max_columns', None):
             #     print(merge_df.describe())
-            merge_df.to_parquet(f's3/{province}_iwis.gzip', compression='gzip')
-            print(f"SUCCESS !! SAVE {province}_iwis.gzip file ...\n\n")
+            merge_df.to_parquet(f's3/{dict_province_name[province]}_iwis.parquet')
+            print(f"SUCCESS !! SAVE {dict_province_name[province]}_iwis.parquet file ...\n\n")
             dict_province[province] = len(merge_df)
 
     print(f"total files: {total_files}, total rows: {total_rows}")
